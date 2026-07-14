@@ -283,30 +283,41 @@
     .mission {
       font-weight: 600;
       color: var(--ink);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .mission-tags {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      margin-left: 0.3rem;
+      align-items: center;
     }
     .mission-tag {
       display: inline-block;
       font-family: var(--font-mono);
-      font-size: 0.6rem;
-      padding: 0.1rem 0.35rem;
-      margin-left: 0.4rem;
+      font-size: 0.58rem;
+      padding: 0.08rem 0.3rem;
       border-radius: 2px;
-      vertical-align: middle;
       font-weight: 700;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.03em;
+      line-height: 1.4;
+      white-space: nowrap;
     }
     .tag-baseline {
       background: var(--accent);
       color: var(--bg);
     }
     .tag-bug {
-      background: var(--muted);
+      background: #555;
       color: var(--bg);
     }
     .tag-electric {
-      background: var(--rule);
-      color: var(--ink);
-      border: 1px solid var(--muted);
+      background: #333;
+      color: #aaa;
+      border: 1px solid #555;
     }
     .tag-pureoil {
       background: var(--bg3);
@@ -450,14 +461,46 @@
       .hero { padding: 2rem 0 1.5rem; }
       .hero-stats { gap: 1.25rem; }
       .hero-stat-num { font-size: 1.4rem; }
-      table { min-width: 480px; }
+      table { min-width: 0; font-size: 0.82rem; }
+      thead th { font-size: 0.62rem; padding: 0.6rem 0.5rem; }
+      tbody td { padding: 0.55rem 0.5rem; font-size: 0.8rem; }
+      tbody td:first-child { padding-left: 0.5rem; }
       .notice { font-size: 0.8rem; padding: 0.75rem 1rem; }
+
+      /* Mobile tag layout: wrap below mission name */
+      .mission {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+      }
+      .mission-name {
+        font-size: 0.82rem;
+      }
+      .mission-tags {
+        margin-left: 0;
+        gap: 0.2rem;
+      }
+      .mission-tag {
+        font-size: 0.6rem;
+        padding: 0.12rem 0.4rem;
+        border-radius: 3px;
+      }
+
+      /* Hide last two columns on mobile (类别/类型 are redundant with tags) */
+      th:nth-child(5),
+      th:nth-child(6),
+      td:nth-child(5),
+      td:nth-child(6) {
+        display: none;
+      }
     }
 
     @media (max-width: 480px) {
       .nav-tab { padding: 0.4rem 0.6rem; font-size: 0.78rem; }
       .filters { gap: 0.35rem; }
       .filter-btn { font-size: 0.68rem; padding: 0.3rem 0.6rem; }
+      .hero-stat-num { font-size: 1.2rem; }
+      .section-title { font-size: 1.15rem; }
     }
   </style>
 </head>
@@ -721,7 +764,7 @@
         mission: "进入太阳",
         weight: 59.43,
         player: "SFS-Mars",
-        baseline: false,
+        baseline: true,
         electric: true,
         admin: true
       },
@@ -734,7 +777,7 @@
         player: "古月木兆",
         baseline: true,
         electric: true,
-        admin: true
+        admin: false
       },
       {
         mode: "simple",
@@ -743,7 +786,7 @@
         player: "青椒",
         baseline: false,
         electric: false,
-        admin: true
+        admin: false
       },
       {
         mode: "simple",
@@ -752,7 +795,7 @@
         player: "10086",
         baseline: false,
         electric: true,
-        admin: true
+        admin: false
       },
       {
         mode: "simple",
@@ -761,7 +804,7 @@
         player: "10086",
         baseline: true,
         electric: true,
-        admin: true
+        admin: false
       },
       {
         mode: "simple",
@@ -770,16 +813,16 @@
         player: "10086",
         baseline: true,
         electric: true,
-        admin: true
+        admin: false
       },
       {
         mode: "simple",
         mission: "逃出太阳系",
         weight: 9.94,
         player: "10086",
-        baseline: true,
+        baseline: false,
         electric: true,
-        admin: true
+        admin: false
       },
       {
         mode: "simple",
@@ -788,7 +831,7 @@
         player: "10086",
         baseline: false,
         electric: true,
-        admin: true
+        admin: false
       },
       {
         mode: "simple",
@@ -797,7 +840,7 @@
         player: "10086",
         baseline: false,
         electric: true,
-        admin: true
+        admin: false
       },
       {
         mode: "simple",
@@ -851,7 +894,7 @@
 
       return '<tr data-baseline="' + record.baseline + '" data-electric="' + record.electric + '">' +
         '<td><span class="rank' + rankClass + '">' + (index + 1) + '</span></td>' +
-        '<td class="mission">' + escapeHtml(record.mission) + ' ' + baselineTag + electricTag + '</td>' +
+        '<td><div class="mission"><span class="mission-name">' + escapeHtml(record.mission) + '</span><span class="mission-tags">' + baselineTag + electricTag + '</span></div></td>' +
         '<td class="weight">' + record.weight.toFixed(2) + 't</td>' +
         '<td class="' + playerClass + '">' + escapeHtml(record.player) + adminBadge + '</td>' +
         '<td class="player">' + (record.electric ? '可用电推' : '纯油') + '</td>' +
